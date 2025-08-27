@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مستشار العطور - اختر عطرك المثالي</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 'tajawal': ['Tajawal', 'sans-serif'] },
+          colors: { primary: '#5D5CDE', secondary: '#F8F9FA' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-900 transition-colors duration-300 font-tajawal">
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-primary to-purple-600 text-white py-8">
+    <div class="container mx-auto text-center">
+      <h1 class="text-4xl font-bold mb-2">🌸 مستشار العطور</h1>
+      <p class="text-xl opacity-90">اكتشف عطرك المثالي ومزج عطرك الخاص</p>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="bg-gray-200 dark:bg-gray-700 h-2">
+    <div id="progressBar" class="progress-bar bg-gradient-to-r from-primary to-purple-600 h-2" style="width: 0%"></div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="text-center py-12">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-8">
+        <div class="text-8xl mb-6">🌺</div>
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">مرحباً بك في عالم العطور</h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+          سنساعدك في اختيار العطر المثالي ومزج عطر جديد خاص بك
+        </p>
+        <button onclick="startQuiz()" class="choice-btn bg-gradient-to-r from-primary to-purple-600 text-white px-12 py-4 rounded-full text-xl font-semibold">
+          ابدأ الرحلة ✨
+        </button>
+      </div>
+    </div>
+
+    <!-- Quiz Container -->
+    <div id="quizContainer" class="hidden">
+      <div id="questionCard" class="question-card bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-6">
+        <div class="text-center mb-8">
+          <span id="questionNumber" class="text-primary font-bold text-lg"></span>
+          <h3 id="questionText" class="text-2xl font-bold text-gray-800 dark:text-white mt-2"></h3>
+          <p id="questionSubtext" class="text-gray-600 dark:text-gray-300 mt-2"></p>
+        </div>
+        <div id="choicesContainer" class="grid gap-4"></div>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="resultsScreen" class="hidden">
+      <div class="result-card text-white rounded-3xl shadow-2xl p-8 mb-6">
+        <div class="text-center">
+          <div class="text-6xl mb-4">🎭</div>
+          <h2 class="text-3xl font-bold mb-4">أفضل العطور المناسبة لك</h2>
+          <div id="topPerfumes" class="space-y-4"></div>
+        </div>
+      </div>
+
+      <!-- Perfume Mixer -->
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-6">
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">✨ امزج عطرك</h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">يمكنك تعديل النسب بين العطور المقترحة</p>
+        <div id="blendContainer" class="space-y-4"></div>
+        <div class="text-center mt-6">
+          <button onclick="generateBlend()" class="choice-btn bg-gradient-to-r from-primary to-purple-600 text-white px-8 py-3 rounded-full font-semibold">
+            🔮 أنشئ عطرك الخاص
+          </button>
+        </div>
+        <div id="blendResult" class="mt-6 text-center text-lg font-bold text-primary"></div>
+      </div>
+
+      <div class="text-center mt-8">
+        <button onclick="restartQuiz()" class="choice-btn bg-gradient-to-r from-primary to-purple-600 text-white px-8 py-3 rounded-full font-semibold">
+          جرب مرة أخرى 🔄
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 dark:bg-gray-800 py-6 mt-12">
+    <div class="container mx-auto text-center">
+      <p class="text-gray-600 dark:text-gray-400">🌸 مستشار العطور - اكتشف عطرك المثالي</p>
+    </div>
+  </footer>
+</body>
+</html>
