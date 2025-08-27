@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مستشار العطور - اختر عطرك المثالي</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 'tajawal': ['Tajawal', 'sans-serif'] },
+          colors: {
+            primary: '#5D5CDE',
+            secondary: '#F8F9FA'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Tajawal', sans-serif; }
+    .choice-btn { transition: all 0.3s ease; }
+    .choice-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(93,92,222,0.2); }
+    .progress-bar { transition: width 0.5s ease; }
+  </style>
+</head>
+<body class="bg-white dark:bg-gray-900 transition-colors duration-300">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-primary to-purple-600 text-white py-8">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl font-bold mb-2">🌸 مستشار العطور</h1>
+      <p class="text-xl opacity-90">اكتشف عطرك المثالي مع اقتراحين عالميين</p>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="bg-gray-200 dark:bg-gray-700 h-2">
+    <div id="progressBar" class="progress-bar bg-gradient-to-r from-primary to-purple-600 h-2" style="width:0%"></div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container mx-auto px-4 py-8 max-w-5xl">
+
+    <!-- Welcome -->
+    <div id="welcomeScreen" class="text-center py-12">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-8">
+        <div class="text-8xl mb-6">✨</div>
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">مرحباً بك في عالم الروائح</h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+          سنساعدك على اختيار عطرك المثالي من بين أشهر العطور العالمية
+        </p>
+        <button onclick="startQuiz()" class="choice-btn bg-gradient-to-r from-primary to-purple-600 text-white px-12 py-4 rounded-full text-xl font-semibold hover:from-purple-600 hover:to-primary">
+          ابدأ الاختبار 🚀
+        </button>
+      </div>
+    </div>
+
+    <!-- Quiz -->
+    <div id="quizContainer" class="hidden">
+      <div id="questionCard" class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-6">
+        <div class="text-center mb-8">
+          <span id="questionNumber" class="text-primary font-bold text-lg"></span>
+          <h3 id="questionText" class="text-2xl font-bold text-gray-800 dark:text-white mt-2"></h3>
+          <p id="questionSubtext" class="text-gray-600 dark:text-gray-300 mt-2"></p>
+        </div>
+        <div id="choicesContainer" class="grid gap-4"></div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsScreen" class="hidden">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">🔮 عطرك المثالي</h2>
+        <p class="text-gray-600 dark:text-gray-300">وجدنا لك اقتراحين عالميين بناءً على إجاباتك</p>
+      </div>
+      <div id="perfumeSuggestions" class="grid md:grid-cols-2 gap-8"></div>
+      <div class="text-center mt-8">
+        <button onclick="restartQuiz()" class="choice-btn bg-gradient-to-r from-primary to-purple-600 text-white px-8 py-3 rounded-full font-semibold">
+          جرب مرة أخرى 🔄
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 dark:bg-gray-800 py-6 mt-12">
+    <div class="container mx-auto px-4 text-center">
+      <p class="text-gray-600 dark:text-gray-400">© 2025 مستشار العطور - powered by روائح العالم 🌍</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    // Dark mode auto
+    if(window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.classList.add('dark');}
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{document.documentElement.classList.toggle('dark',e.matches)})
+
+    const questions = [
+      {id:1,text:"ما نوع العطر الذي تفضل؟",subtext:"",choices:[
+        {text:"نسائي 👩",points:{feminine:3}},
+        {text:"رجالي 👨",points:{masculine:3}},
+        {text:"مشترك 👥",points:{neutral:2}}
+      ]},
+      {id:2,text:"مناسبة العطر؟",subtext:"",choices:[
+        {text:"العمل 💼",points:{professional:3,light:1}},
+        {text:"حفلات 🎉",points:{luxury:3,strong:2}},
+        {text:"يومي 🌅",points:{casual:3,moderate:2}},
+        {text:"رومانسي 💕",points:{romantic:3,sweet:2}}
+      ]},
+      {id:3,text:"نوع الروائح المفضلة:",subtext:"",choices:[
+        {text:"حارة (عود، فانيليا) 🔥",points:{warm:3,spicy:2}},
+        {text:"منعشة (ليمون، بحر) ❄️",points:{fresh:3,citrus:2}},
+        {text:"زهور 🌸",points:{floral:3,balanced:2}}
+      ]},
+      {id:4,text:"حالتك النفسية؟",choices:[
+        {text:"هادئ 🧘",points:{calm:3}},
+        {text:"متحمس ⚡",points:{energetic:3}},
+        {text:"رومانسي 💭",points:{romantic:3}},
+        {text:"واثق 💪",points:{confident:3}}
+      ]},
+      {id:5,text:"قوة العطر تفضل:",choices:[
+        {text:"خفيف 🌬️",points:{light:3}},
+        {text:"متوسط ⚖️",points:{moderate:3}},
+        {text:"قوي 💥",points:{strong:3}}
+      ]}
+    ];
+
+    const globalPerfumes = [
+      {name:"Dior Sauvage",category:"رجالي - منعش",notes:["الفلفل 30%","البرغموت 30%","الخزامى 20%","الأمبروكسان 20%"],points:{masculine:3,energetic:2,fresh:3,strong:2}},
+      {name:"Bleu de Chanel",category:"رجالي - خشبي",notes:["الليمون 25%","الخشب 35%","النعناع 20%","الزنجبيل 20%"],points:{masculine:3,professional:2,strong:2}},
+      {name:"Chanel N°5",category:"نسائي - زهري",notes:["الياسمين 30%","الورد 30%","الفانيليا 20%","المسك 20%"],points:{feminine:3,floral:3,romantic:2}},
+      {name:"Tom Ford Oud Wood",category:"خشبي فاخر",notes:["العود 40%","الفانيليا 25%","التوابل 20%","البرغموت 15%"],points:{warm:3,spicy:2,masculine:2,luxury:2}},
+      {name:"Versace Bright Crystal",category:"نسائي - منعش",notes:["الرمان 30%","اللوتس 30%","العود 20%","الأرز 20%"],points:{feminine:2,fresh:2,casual:2,light:2}}
+    ];
+
+    let currentQuestion=0,userPoints={};
+
+    function startQuiz(){document.getElementById('welcomeScreen').classList.add('hidden');document.getElementById('quizContainer').classList.remove('hidden');showQuestion(0);updateProgress();}
+    function showQuestion(i){
+      const q=questions[i];
+      document.getElementById('questionNumber').textContent=`السؤال ${i+1} من ${questions.length}`;
+      document.getElementById('questionText').textContent=q.text;
+      const c=document.getElementById('choicesContainer');c.innerHTML='';
+      q.choices.forEach((ch,ix)=>{
+        let b=document.createElement('button');b.className="choice-btn bg-gray-50 dark:bg-gray-700 hover:bg-primary hover:text-white p-6 rounded-2xl text-lg";b.innerHTML=ch.text;
+        b.onclick=()=>selectChoice(i,ch);c.appendChild(b);
+      })
+    }
+    function selectChoice(i,ch){
+      for(const[k,v]of Object.entries(ch.points)){userPoints[k]=(userPoints[k]||0)+v;}
+      if(i<questions.length-1){currentQuestion++;setTimeout(()=>{showQuestion(currentQuestion);updateProgress()},300);}
+      else{setTimeout(()=>{showResults()},300);}
+    }
+    function updateProgress(){document.getElementById('progressBar').style.width=((currentQuestion+1)/questions.length*100)+"%";}
+
+    function calcScore(p){let s=0;for(const[k,v] of Object.entries(p.points)){if(userPoints[k])s+=userPoints[k]*v;}return s;}
+
+    function showResults(){
+      document.getElementById('quizContainer').classList.add('hidden');document.getElementById('resultsScreen').classList.remove('hidden');
+      let scored=globalPerfumes.map(p=>({...p,score:calcScore(p)}));
+      scored.sort((a,b)=>b.score-a.score);
+      const top2=scored.slice(0,2);
+      const cont=document.getElementById('perfumeSuggestions');cont.innerHTML='';
+      top2.forEach((perf,i)=>{
+        cont.innerHTML+=`
+          <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6">
+            <h3 class="text-xl font-bold text-primary mb-2">الاقتراح ${i+1}</h3>
+            <p class="text-2xl font-bold mb-2">${perf.name}</p>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">${perf.category}</p>
+            <h4 class="font-bold mb-2">نسب المزج:</h4>
+            <ul class="list-disc pr-5 text-gray-700 dark:text-gray-300">${perf.notes.map(n=>`<li>${n}</li>`).join('')}</ul>
+          </div>`;
+      });
+      document.getElementById('progressBar').style.width="100%";
+    }
+
+    function restartQuiz(){currentQuestion=0;userPoints={};document.getElementById('resultsScreen').classList.add('hidden');document.getElementById('welcomeScreen').classList.remove('hidden');document.getElementById('progressBar').style.width="0%";}
+  </script>
+</body>
+</html>
