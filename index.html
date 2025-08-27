@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مستشار العطور - اختر عطرك المثالي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'tajawal': ['Tajawal', 'sans-serif']
+                    },
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#F8F9FA'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        .question-card {
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+        @keyframes slideInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .choice-btn {
+            transition: all 0.3s ease;
+        }
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(93, 92, 222, 0.2);
+        }
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-primary to-purple-600 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-2">🌸 مستشار العطور</h1>
+            <p class="text-xl opacity-90">اكتشف عطرك المثالي من خلال رحلة شخصية مميزة</p>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="bg-gray-200 dark:bg-gray-700 h-2">
+        <div id="progressBar" class="progress-bar bg-gradient-to-r from-primary to-purple-600 h-2" style="width: 0%"></div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Welcome Screen -->
+        <div id="welcomeScreen" class="text-center py-12">
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-8">
+                <div class="text-8xl mb-6">🌺</div>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-4">مرحباً بك في عالم العطور</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                    سنساعدك في اختيار العطر المثالي لشخصيتك ومزاجك من خلال مجموعة من الأسئلة المدروسة
+                </p>
+                <button onclick="startQuiz()" class="choice-btn bg-gradient-to-r from-primary to-purple-600 text-white px-12 py-4 rounded-full text-xl font-semibold hover:from-purple-600 hover:to-primary">
+                    ابدأ الرحلة ✨
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quizContainer" class="hidden">
+            <div id="questionCard" class="question-card bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-6">
+                <div class="text-center mb-8">
+                    <span id="questionNumber" class="text-primary font-bold text-lg"></span>
+                    <h3 id="questionText" class="text-2xl font-bold text-gray-800 dark:text-white mt-2"></h3>
+                    <p id="questionSubtext" class="text-gray-600 dark:text-gray-300 mt-2"></p>
+                </div>
+                
+                <div id="choicesContainer" class="grid gap-4">
+                    <!-- Choices will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="hidden">
+            <div class="result-card text-white rounded-3xl shadow-2xl p-8 mb-6">
+                <div class="text-center">
+                    <div class="text-6xl mb-4">🎭</div>
+                    <h2 class="text-3xl font-bold mb-4">عطرك المثالي</h2>
+                    <div id="resultPerfume" class="text-5xl font-bold mb-2"></div>
+                    <div id="resultCategory" class="text-xl opacity-90 mb-6"></div>
+                    <div id="resultDescription" class="text-lg leading-relaxed max-w-2xl mx-auto"></div>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8">
+                <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">تفاصيل العطر</h3>
+                <div id="perfumeDetails" class="grid md:grid-cols-2 gap-6">
+                    <!-- Details will be inserted here -->
+                </div>
+                
+                <div class="text-center mt-8">
+                    <button onclick="restartQuiz()" class="choice-btn bg-gradient-to-r from-primary to-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:from-purple-600 hover:to-primary">
+                        جرب مرة أخرى 🔄
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-600 dark:text-gray-400">مستشار العطور - اكتشف عطرك المثالي 🌸</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode handling
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        const questions = [
+            {
+                id: 1,
+                text: "ما نوع العطر الذي تفضل؟",
+                subtext: "اختر الفئة المناسبة لك",
+                choices: [
+                    { text: "عطر نسائي 👩", value: "female", points: { feminine: 3 } },
+                    { text: "عطر رجالي 👨", value: "male", points: { masculine: 3 } },
+                    { text: "عطر مشترك (يناسب الجنسين)", value: "unisex", points: { neutral: 2 } }
+                ]
+            },
+            {
+                id: 2,
+                text: "ما المناسبة التي تريد العطر من أجلها؟",
+                subtext: "كل مناسبة لها عطر مميز",
+                choices: [
+                    { text: "للعمل والاجتماعات الرسمية 💼", value: "work", points: { professional: 3, light: 2 } },
+                    { text: "للمناسبات الخاصة والحفلات 🎉", value: "special", points: { luxury: 3, strong: 2 } },
+                    { text: "للاستخدام اليومي العادي 🌅", value: "daily", points: { casual: 3, moderate: 2 } },
+                    { text: "للمواعيد الرومانسية 💕", value: "romantic", points: { romantic: 3, sweet: 2 } }
+                ]
+            },
+            {
+                id: 3,
+                text: "أي نوع من الروائح تفضل؟",
+                subtext: "الروائح الحارة تعطي دفء، والباردة تعطي انتعاش",
+                choices: [
+                    { text: "الروائح الحارة (القرفة، الفانيليا، العود) 🔥", value: "warm", points: { warm: 3, spicy: 2 } },
+                    { text: "الروائح الباردة (النعناع، الليمون، البحر) ❄️", value: "cool", points: { fresh: 3, citrus: 2 } },
+                    { text: "الروائح المتوازنة (الورد، الياسمين) 🌸", value: "balanced", points: { floral: 3, balanced: 2 } }
+                ]
+            },
+            {
+                id: 4,
+                text: "كيف تصف حالتك النفسية اليوم؟",
+                subtext: "العطر يؤثر على المزاج ويعكس الشخصية",
+                choices: [
+                    { text: "هادئ ومسترخي 🧘", value: "calm", points: { calm: 3, soft: 2 } },
+                    { text: "نشيط ومتحمس ⚡", value: "energetic", points: { energetic: 3, vibrant: 2 } },
+                    { text: "رومانسي وحالم 💭", value: "dreamy", points: { romantic: 2, dreamy: 3 } },
+                    { text: "واثق وقوي 💪", value: "confident", points: { confident: 3, bold: 2 } }
+                ]
+            },
+            {
+                id: 5,
+                text: "ما قوة العطر التي تفضلها؟",
+                subtext: "بعض الأشخاص يفضلون العطور الخفيفة، والبعض يفضل القوية",
+                choices: [
+                    { text: "خفيف ومنعش 🌬️", value: "light", points: { light: 3, subtle: 2 } },
+                    { text: "متوسط القوة ⚖️", value: "medium", points: { moderate: 3, balanced: 1 } },
+                    { text: "قوي وثابت 💥", value: "strong", points: { strong: 3, intense: 2 } }
+                ]
+            },
+            {
+                id: 6,
+                text: "أي من هذه الأوقات تفضل استخدام العطر فيه؟",
+                subtext: "كل وقت له عطر مناسب",
+                choices: [
+                    { text: "في الصباح الباكر 🌅", value: "morning", points: { fresh: 2, energetic: 1 } },
+                    { text: "في فترة الظهيرة ☀️", value: "afternoon", points: { balanced: 2, moderate: 1 } },
+                    { text: "في المساء والليل 🌙", value: "evening", points: { warm: 2, romantic: 1, luxury: 1 } }
+                ]
+            }
+        ];
+
+        const perfumes = [
+            {
+                name: "نسيم البحر",
+                category: "منعش ومنشط",
+                description: "عطر يجمع بين نقاء البحر وانتعاش النسيم، مثالي للأشخاص النشيطين الذين يحبون الطبيعة",
+                notes: ["ملح البحر", "النعناع البري", "اللافندر", "المسك الأبيض"],
+                personality: "للشخصية النشيطة والمحبة للطبيعة",
+                occasion: "مثالي للنهار والأنشطة الخارجية",
+                points: { fresh: 3, energetic: 2, cool: 2, light: 2, citrus: 1 }
+            },
+            {
+                name: "ضوء القمر",
+                category: "رومانسي وحالم",
+                description: "عطر ساحر يحاكي جمال ضوء القمر في ليلة صافية، يناسب الأرواح الرومانسية والحالمة",
+                notes: ["الياسمين الليلي", "الورد الدمشقي", "خشب الصندل", "العنبر"],
+                personality: "للشخصية الرومانسية والحساسة",
+                occasion: "مثالي للمساء والمناسبات الخاصة",
+                points: { romantic: 3, dreamy: 3, floral: 2, soft: 2, evening: 2 }
+            },
+            {
+                name: "نار العود",
+                category: "قوي وفاخر",
+                description: "عطر شرقي أصيل يجمع بين عراقة العود وحرارة التوابل، للشخصيات القوية والواثقة",
+                notes: ["العود الكمبودي", "الزعفران", "العنبر الأسود", "خشب الورد"],
+                personality: "للشخصية القوية والواثقة",
+                occasion: "للمناسبات الرسمية والمهمة",
+                points: { confident: 3, bold: 3, warm: 3, strong: 3, luxury: 2, masculine: 2 }
+            },
+            {
+                name: "حديقة الورود",
+                category: "أنثوي وناعم",
+                description: "عطر أنثوي رقيق يحتضن عبق الورود الطازجة في حديقة ربيعية مزهرة",
+                notes: ["الورد البلغاري", "الفاوانيا", "المسك الوردي", "خشب الأرز"],
+                personality: "للشخصية الأنثوية الناعمة",
+                occasion: "مثالي للاستخدام اليومي والمناسبات النهارية",
+                points: { feminine: 3, soft: 3, floral: 3, light: 2, romantic: 1 }
+            },
+            {
+                name: "عاصفة الصحراء",
+                category: "مغامر وجريء",
+                description: "عطر مغامر يحمل قوة الصحراء وحرارة الرمال، للأرواح الجريئة والمستقلة",
+                notes: ["التوابل البرية", "جلد الغزال", "خشب الأبنوس", "العنبر الرمادي"],
+                personality: "للشخصية المغامرة والمستقلة",
+                occasion: "للمناسبات الخاصة والأوقات المهمة",
+                points: { bold: 3, confident: 2, warm: 2, strong: 2, spicy: 3, masculine: 2 }
+            },
+            {
+                name: "همسة الربيع",
+                category: "منعش ومتوازن",
+                description: "عطر متوازن يجمع بين نعومة الربيع وانتعاش الطبيعة المتجددة",
+                notes: ["أزهار البرتقال", "الليمون الأخضر", "الخزامى", "المسك الأبيض"],
+                personality: "للشخصية المتوازنة والمحبة للطبيعة",
+                occasion: "مناسب لجميع الأوقات والمناسبات",
+                points: { balanced: 3, fresh: 2, moderate: 2, floral: 2, citrus: 2, neutral: 2 }
+            },
+            {
+                name: "سحر الليل",
+                category: "غامض وأنيق",
+                description: "عطر غامض وأنيق يحمل سحر الليل وأناقة المساء، للشخصيات المتميزة",
+                notes: ["الباتشولي", "البرغموت الأسود", "الفانيليا المدخنة", "العود الأبيض"],
+                personality: "للشخصية الغامضة والأنيقة",
+                occasion: "مثالي للمساء والمناسبات الفاخرة",
+                points: { luxury: 3, evening: 3, warm: 2, strong: 2, confident: 1, professional: 1 }
+            },
+            {
+                name: "نفحة الصباح",
+                category: "منشط ومنعش",
+                description: "عطر منشط يبعث الحيوية والنشاط، مثالي لبداية يوم جديد مفعم بالطاقة",
+                notes: ["البرتقال الحلو", "النعناع الطازج", "الجريب فروت", "خشب الأرز الأبيض"],
+                personality: "للشخصية النشيطة والمحبة للحياة",
+                occasion: "مثالي للصباح والنشاطات النهارية",
+                points: { energetic: 3, fresh: 3, morning: 3, light: 2, citrus: 3, vibrant: 2 }
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = {};
+        let userPoints = {};
+
+        function startQuiz() {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            showQuestion(0);
+            updateProgress();
+        }
+
+        function showQuestion(index) {
+            const question = questions[index];
+            document.getElementById('questionNumber').textContent = `السؤال ${index + 1} من ${questions.length}`;
+            document.getElementById('questionText').textContent = question.text;
+            document.getElementById('questionSubtext').textContent = question.subtext;
+
+            const choicesContainer = document.getElementById('choicesContainer');
+            choicesContainer.innerHTML = '';
+
+            // Adjust grid based on number of choices
+            const numChoices = question.choices.length;
+            if (numChoices <= 2) {
+                choicesContainer.className = 'grid gap-4 md:grid-cols-2';
+            } else if (numChoices <= 4) {
+                choicesContainer.className = 'grid gap-4 md:grid-cols-2';
+            } else {
+                choicesContainer.className = 'grid gap-4';
+            }
+
+            question.choices.forEach((choice, choiceIndex) => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn bg-gray-50 dark:bg-gray-700 hover:bg-primary hover:text-white text-gray-800 dark:text-white p-6 rounded-2xl text-lg font-medium transition-all duration-300 text-right border-2 border-transparent hover:border-primary';
+                button.innerHTML = choice.text;
+                button.onclick = () => selectChoice(index, choiceIndex);
+                choicesContainer.appendChild(button);
+            });
+        }
+
+        function selectChoice(questionIndex, choiceIndex) {
+            const question = questions[questionIndex];
+            const choice = question.choices[choiceIndex];
+            
+            userAnswers[questionIndex] = choice;
+            
+            // Add points
+            for (const [key, value] of Object.entries(choice.points)) {
+                userPoints[key] = (userPoints[key] || 0) + value;
+            }
+
+            // Move to next question or show results
+            if (questionIndex < questions.length - 1) {
+                currentQuestion++;
+                setTimeout(() => {
+                    showQuestion(currentQuestion);
+                    updateProgress();
+                }, 300);
+            } else {
+                setTimeout(() => {
+                    showResults();
+                }, 300);
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showResults() {
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+            
+            // Find best matching perfume
+            let bestPerfume = null;
+            let bestScore = -1;
+
+            perfumes.forEach(perfume => {
+                let score = 0;
+                for (const [key, value] of Object.entries(perfume.points)) {
+                    if (userPoints[key]) {
+                        score += Math.min(userPoints[key], value) * 2;
+                        score += userPoints[key] * value;
+                    }
+                }
+                
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestPerfume = perfume;
+                }
+            });
+
+            // Display results
+            document.getElementById('resultPerfume').textContent = bestPerfume.name;
+            document.getElementById('resultCategory').textContent = bestPerfume.category;
+            document.getElementById('resultDescription').textContent = bestPerfume.description;
+
+            // Display perfume details
+            const detailsContainer = document.getElementById('perfumeDetails');
+            detailsContainer.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-2">🌸 المكونات الأساسية:</h4>
+                        <ul class="text-gray-600 dark:text-gray-300 space-y-1">
+                            ${bestPerfume.notes.map(note => `<li>• ${note}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-2">👤 الشخصية المناسبة:</h4>
+                        <p class="text-gray-600 dark:text-gray-300">${bestPerfume.personality}</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-2">⏰ المناسبة المثلى:</h4>
+                        <p class="text-gray-600 dark:text-gray-300">${bestPerfume.occasion}</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-primary/10 to-purple-600/10 p-4 rounded-lg">
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-2">✨ نصيحة خاصة:</h4>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">يُنصح برش العطر على نقاط النبض مثل الرسغين والرقبة للحصول على أفضل انتشار وثبات.</p>
+                    </div>
+                </div>
+            `;
+
+            // Reset progress bar
+            document.getElementById('progressBar').style.width = '100%';
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = {};
+            userPoints = {};
+            
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+            document.getElementById('progressBar').style.width = '0%';
+        }
+    </script>
+</body>
+</html>
