@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مستشار العطور الخليجي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>✨ اكتشف عطرك الخليجي المثالي</h1>
+    <p>حلل شخصيتك واختر من بين أفضل العطور الشرقية والغربية، واحصل على عبوة هدية مع كل عملية شراء!</p>
+
+    <form id="perfumeForm">
+      <label>الجنس:</label>
+      <select name="gender">
+        <option value="male">ذكر</option>
+        <option value="female">أنثى</option>
+      </select>
+
+      <label>العمر:</label>
+      <select name="age">
+        <option value="teen">أقل من 18</option>
+        <option value="adult">18-35</option>
+        <option value="mature">35+</option>
+      </select>
+
+      <label>نوع الشخصية:</label>
+      <select name="personality">
+        <option value="calm">هادئ</option>
+        <option value="energetic">عصبي / نشيط</option>
+        <option value="romantic">رومانسي</option>
+      </select>
+
+      <label>نوع العطر المفضل:</label>
+      <select name="style">
+        <option value="oriental">شرقي</option>
+        <option value="western">غربي</option>
+        <option value="fresh">منعش</option>
+      </select>
+
+      <label>المناسبة:</label>
+      <select name="occasion">
+        <option value="daily">يومي</option>
+        <option value="work">العمل</option>
+        <option value="evening">سهرة</option>
+        <option value="gift">هدية</option>
+      </select>
+
+      <button type="submit">عرض التوصيات</button>
+    </form>
+
+    <div id="results"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
