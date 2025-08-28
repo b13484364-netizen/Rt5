@@ -3,126 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مستشار العطور المحترف - اكتشف عطرك المثالي</title>
+    <title>مستشار العطور الذكي - اكتشف عطرك المثالي</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'cairo': ['Cairo', 'sans-serif'],
+                        'amiri': ['Amiri', 'serif']
+                    },
+                    colors: {
+                        primary: '#5D5CDE',
+                        secondary: '#F8F9FA',
+                        gold: '#D4AF37',
+                        rose: '#FF6B9D',
+                        luxury: '#1a0b3d'
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'particles': 'particles 20s linear infinite',
+                        'fadeInScale': 'fadeInScale 0.8s ease-out',
+                        'slideInRight': 'slideInRight 0.6s ease-out',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
             font-family: 'Cairo', sans-serif;
         }
-        .question-card {
-            transition: transform 0.5s ease, opacity 0.5s ease;
-        }
-        .choice-btn {
-            transition: all 0.3s ease;
-        }
-        .choice-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .progress-bar {
-            transition: width 0.5s ease;
-        }
-        .perfume-card {
-            transition: all 0.3s ease;
-        }
-        .perfume-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-        .composition-bar {
-            height: 24px;
-            border-radius: 12px;
+        .hero-bg {
+            background: linear-gradient(135deg, 
+                rgba(93, 92, 222, 0.9) 0%, 
+                rgba(139, 69, 19, 0.8) 25%,
+                rgba(212, 175, 55, 0.7) 50%,
+                rgba(255, 107, 157, 0.8) 75%,
+                rgba(138, 43, 226, 0.9) 100%);
+            position: relative;
             overflow: hidden;
         }
-        .composition-segment {
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.1"><circle cx="30" cy="30" r="2"/></g></svg>') repeat;
+            animation: particles 20s linear infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(93, 92, 222, 0.3); }
+            to { box-shadow: 0 0 40px rgba(93, 92, 222, 0.8), 0 0 60px rgba(255, 107, 157, 0.4); }
+        }
+        @keyframes particles {
+            0% { transform: translateX(0px); }
+            100% { transform: translateX(-60px); }
+        }
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes slideInRight {
+            0% { opacity: 0; transform: translateX(30px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        .question-card {
+            animation: fadeInScale 0.8s ease-out;
+        }
+        .choice-btn {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .choice-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
             height: 100%;
-            display: inline-block;
-            vertical-align: top;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
         }
-        .legend-item {
-            display: inline-flex;
+        .choice-btn:hover::before {
+            left: 100%;
+        }
+        .choice-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(93, 92, 222, 0.3);
+        }
+        .progress-bar {
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, #5D5CDE, #FF6B9D, #D4AF37);
+            background-size: 200% 100%;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        .result-card {
+            background: linear-gradient(135deg, 
+                #1a0b3d 0%, 
+                #5D5CDE 25%, 
+                #FF6B9D 50%, 
+                #D4AF37 75%, 
+                #8b4513 100%);
+            position: relative;
+        }
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        .perfume-icon {
+            font-size: 4rem;
+            background: linear-gradient(45deg, #D4AF37, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: float 3s ease-in-out infinite;
+        }
+        .luxury-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #D4AF37, #FFD700);
+            border-radius: 50%;
+            display: flex;
             align-items: center;
-            margin: 0 12px 8px 0;
-        }
-        .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 4px;
-            margin-left: 8px;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-left: 12px;
         }
     </style>
 </head>
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl font-bold mb-2">🌺 مستشار العطور المحترف</h1>
-            <p class="text-xl opacity-90">اكتشف عطرك المثالي من خلال رحلة شخصية مميزة</p>
+<body class="bg-white dark:bg-gray-900 transition-colors duration-300">
+    <!-- Hero Header -->
+    <header class="hero-bg text-white py-16 relative">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="perfume-icon mb-6">
+                <i class="fas fa-spray-can"></i>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 font-amiri">مستشار العطور الذكي</h1>
+            <p class="text-xl md:text-2xl opacity-90 mb-8 max-w-3xl mx-auto leading-relaxed">
+                اكتشف عطرك المثالي من بين أشهر العطور العالمية بتقنية ذكية تحلل شخصيتك وتفضيلاتك
+            </p>
+            <div class="flex justify-center items-center space-x-reverse space-x-8 mb-8">
+                <div class="text-center">
+                    <div class="text-3xl mb-2">🎯</div>
+                    <p class="text-sm opacity-80">تحليل دقيق</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl mb-2">🌟</div>
+                    <p class="text-sm opacity-80">عطور عالمية</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl mb-2">💎</div>
+                    <p class="text-sm opacity-80">اختيار احترافي</p>
+                </div>
+            </div>
         </div>
+        
+        <!-- Floating perfume bottles animation -->
+        <div class="absolute top-20 left-10 text-4xl opacity-20 animate-float">💐</div>
+        <div class="absolute top-32 right-16 text-3xl opacity-15 animate-float" style="animation-delay: 1s;">🌸</div>
+        <div class="absolute bottom-20 left-20 text-3xl opacity-25 animate-float" style="animation-delay: 2s;">✨</div>
+        <div class="absolute bottom-32 right-12 text-4xl opacity-20 animate-float" style="animation-delay: 0.5s;">🧴</div>
     </header>
 
     <!-- Progress Bar -->
-    <div class="bg-gray-200 dark:bg-gray-800 h-2">
-        <div id="progressBar" class="progress-bar bg-gradient-to-r from-purple-600 to-indigo-600 h-2" style="width: 0%"></div>
+    <div class="bg-gray-200 dark:bg-gray-700 h-2">
+        <div id="progressBar" class="progress-bar bg-gradient-to-r from-primary to-purple-600 h-2" style="width: 0%"></div>
     </div>
 
     <!-- Main Container -->
-    <main class="container mx-auto px-4 py-12 max-w-6xl">
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Welcome Screen -->
         <div id="welcomeScreen" class="text-center py-12">
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-8 max-w-3xl mx-auto">
-                <div class="text-8xl mb-6">🌟</div>
-                <h2 class="text-3xl font-bold mb-4">مرحباً بك في عالم العطور المميز</h2>
-                <p class="text-xl mb-8 leading-relaxed opacity-80">
-                    سنساعدك في اختيار العطر المثالي لشخصيتك ومزاجك من خلال مجموعة من الأسئلة المدروسة، ثم نقدم لك اقتراحين مميزين مع تفاصيل المكونات والنسب
-                </p>
-                <button onclick="startQuiz()" class="choice-btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-12 py-4 rounded-full text-xl font-semibold shadow-lg">
-                    ابدأ الرحلة الآن ✨
-                </button>
-            </div>
-
-            <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 max-w-4xl mx-auto">
-                <h3 class="text-2xl font-bold mb-6">مميزات التطبيق</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="text-center p-4">
-                        <div class="text-4xl text-purple-600 mb-3"><i class="fas fa-database"></i></div>
-                        <h4 class="font-bold text-lg mb-2">قاعدة عطور عالمية</h4>
-                        <p class="opacity-80">أكثر من 50 عطر من أشهر الماركات العالمية</p>
+            <div class="luxury-card rounded-3xl shadow-2xl p-8 mb-8 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-gold/5"></div>
+                <div class="relative z-10">
+                    <div class="perfume-icon mb-6">
+                        <i class="fas fa-gem"></i>
                     </div>
-                    <div class="text-center p-4">
-                        <div class="text-4xl text-purple-600 mb-3"><i class="fas fa-flask"></i></div>
-                        <h4 class="font-bold text-lg mb-2">تحليل المكونات</h4>
-                        <p class="opacity-80">تفصيل نسب المكونات لكل عطر مقترح</p>
+                    <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4 font-amiri">مرحباً بك في عالم العطور الفاخرة</h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto">
+                        استكشف مجموعة مختارة من أرقى العطور العالمية واكتشف العطر الذي يعكس شخصيتك الفريدة من خلال تحليل شامل ومدروس
+                    </p>
+                    
+                    <!-- Features Cards -->
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white/50 dark:bg-gray-700/50 p-4 rounded-2xl backdrop-blur-sm">
+                            <div class="text-3xl mb-3">🔬</div>
+                            <h3 class="font-bold text-gray-800 dark:text-white mb-2">تحليل علمي</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">خوارزمية متقدمة تحلل تفضيلاتك</p>
+                        </div>
+                        <div class="bg-white/50 dark:bg-gray-700/50 p-4 rounded-2xl backdrop-blur-sm">
+                            <div class="text-3xl mb-3">🌍</div>
+                            <h3 class="font-bold text-gray-800 dark:text-white mb-2">عطور عالمية</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">من أشهر دور العطور في العالم</p>
+                        </div>
+                        <div class="bg-white/50 dark:bg-gray-700/50 p-4 rounded-2xl backdrop-blur-sm">
+                            <div class="text-3xl mb-3">🎯</div>
+                            <h3 class="font-bold text-gray-800 dark:text-white mb-2">دقة عالية</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">توصيات مخصصة لشخصيتك</p>
+                        </div>
                     </div>
-                    <div class="text-center p-4">
-                        <div class="text-4xl text-purple-600 mb-3"><i class="fas fa-heart"></i></div>
-                        <h4 class="font-bold text-lg mb-2">مقارنة مخصصة</h4>
-                        <p class="opacity-80">عرض اقتراحين مع مقارنة تفصيلية</p>
-                    </div>
+                    
+                    <button onclick="startQuiz()" class="choice-btn bg-gradient-to-r from-primary via-rose to-gold text-white px-16 py-5 rounded-full text-xl font-bold hover:shadow-2xl transform hover:scale-105 animate-pulse-slow">
+                        <i class="fas fa-magic ml-2"></i>
+                        ابدأ رحلة الاكتشاف
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Quiz Container -->
         <div id="quizContainer" class="hidden">
-            <div class="flex justify-between mb-4">
-                <button onclick="previousQuestion()" id="prevBtn" class="choice-btn bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-lg font-medium hidden">
-                    <i class="fas fa-chevron-right ml-2"></i> السابق
-                </button>
-                <button onclick="nextQuestion()" id="nextBtn" class="choice-btn bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-lg font-medium hidden">
-                    التالي <i class="fas fa-chevron-left ml-2"></i>
-                </button>
-            </div>
-
             <div id="questionCard" class="question-card bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-6">
                 <div class="text-center mb-8">
-                    <span id="questionNumber" class="text-purple-600 font-bold text-lg"></span>
-                    <h3 id="questionText" class="text-2xl font-bold mt-2"></h3>
-                    <p id="questionSubtext" class="opacity-80 mt-2"></p>
+                    <span id="questionNumber" class="text-primary font-bold text-lg"></span>
+                    <h3 id="questionText" class="text-2xl font-bold text-gray-800 dark:text-white mt-2"></h3>
+                    <p id="questionSubtext" class="text-gray-600 dark:text-gray-300 mt-2"></p>
                 </div>
-
+                
                 <div id="choicesContainer" class="grid gap-4">
                     <!-- Choices will be inserted here -->
                 </div>
@@ -131,43 +252,24 @@
 
         <!-- Results Screen -->
         <div id="resultsScreen" class="hidden">
-            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-3xl shadow-2xl p-8 mb-8 text-center">
-                <div class="text-6xl mb-4">🎉</div>
-                <h2 class="text-3xl font-bold mb-4">اكتشفنا عطرك المثالي!</h2>
-                <p class="text-xl opacity-90 max-w-3xl mx-auto">بناءً على إجاباتك، اخترنا لك أفضل عطرين يناسبان شخصيتك ومزاجك</p>
-            </div>
-
-            <div id="perfumesComparison" class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                <!-- Perfume cards will be inserted here -->
-            </div>
-
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8">
-                <h3 class="text-2xl font-bold text-center mb-8">كيف تفهم نسب المكونات؟</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                    <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                        <div class="text-3xl text-purple-600 mb-2"><i class="fas fa-tree"></i></div>
-                        <h4 class="font-bold">خشبي</h4>
-                        <p class="text-sm opacity-80 mt-1">العود، الصندل، الأرز</p>
-                    </div>
-                    <div class="p-4 bg-pink-50 dark:bg-pink-900/20 rounded-lg">
-                        <div class="text-3xl text-pink-600 mb-2"><i class="fas fa-fan"></i></div>
-                        <h4 class="font-bold">زهري</h4>
-                        <p class="text-sm opacity-80 mt-1">الورد، الياسمين، الزنبق</p>
-                    </div>
-                    <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                        <div class="text-3xl text-yellow-600 mb-2"><i class="fas fa-lemon"></i></div>
-                        <h4 class="font-bold">حمضي</h4>
-                        <p class="text-sm opacity-80 mt-1">الليمون، البرتقال، الجريب فروت</p>
-                    </div>
-                    <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                        <div class="text-3xl text-red-600 mb-2"><i class="fas fa-pepper-hot"></i></div>
-                        <h4 class="font-bold">تويلى</h4>
-                        <p class="text-sm opacity-80 mt-1">الفانيليا، القرفة، العنبر</p>
-                    </div>
+            <div class="result-card text-white rounded-3xl shadow-2xl p-8 mb-6">
+                <div class="text-center">
+                    <div class="text-6xl mb-4">🎭</div>
+                    <h2 class="text-3xl font-bold mb-4">عطرك المثالي</h2>
+                    <div id="resultPerfume" class="text-5xl font-bold mb-2"></div>
+                    <div id="resultCategory" class="text-xl opacity-90 mb-6"></div>
+                    <div id="resultDescription" class="text-lg leading-relaxed max-w-2xl mx-auto"></div>
                 </div>
-
-                <div class="text-center mt-12">
-                    <button onclick="restartQuiz()" class="choice-btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-4 rounded-full font-semibold shadow-lg">
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8">
+                <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">تفاصيل العطر</h3>
+                <div id="perfumeDetails" class="grid md:grid-cols-2 gap-6">
+                    <!-- Details will be inserted here -->
+                </div>
+                
+                <div class="text-center mt-8">
+                    <button onclick="restartQuiz()" class="choice-btn bg-gradient-to-r from-primary to-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:from-purple-600 hover:to-primary">
                         جرب مرة أخرى 🔄
                     </button>
                 </div>
@@ -176,20 +278,24 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-100 dark:bg-gray-800 py-6">
+    <footer class="bg-gray-100 dark:bg-gray-800 py-6 mt-12">
         <div class="container mx-auto px-4 text-center">
-            <p class="opacity-70">مستشار العطور - اكتشف عطرك المثالي 🌺</p>
+            <p class="text-gray-600 dark:text-gray-400">مستشار العطور - اكتشف عطرك المثالي 🌸</p>
         </div>
     </footer>
 
     <script>
         // Dark mode handling
-        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        function updateDarkMode(e) {
-            document.documentElement.classList.toggle('dark', e.matches);
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
         }
-        darkModeMediaQuery.addListener(updateDarkMode);
-        updateDarkMode(darkModeMediaQuery);
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
 
         const questions = [
             {
@@ -253,144 +359,145 @@
                     { text: "في فترة الظهيرة ☀️", value: "afternoon", points: { balanced: 2, moderate: 1 } },
                     { text: "في المساء والليل 🌙", value: "evening", points: { warm: 2, romantic: 1, luxury: 1 } }
                 ]
-            },
-            {
-                id: 7,
-                text: "ما هي ميزانيتك للعطر؟",
-                subtext: "سيساعدنا ذلك في اختيار العطر المناسب لسعرك",
-                choices: [
-                    { text: "ميزانية محدودة (تحت 50 دولار) 💵", value: "low", points: { casual: 2, light: 1 } },
-                    { text: "ميزانية متوسطة (50-150 دولار) 💰", value: "medium", points: { balanced: 2, moderate: 2 } },
-                    { text: "ميزانية عالية (أكثر من 150 دولار) 💎", value: "high", points: { luxury: 3, strong: 2 } }
-                ]
-            },
-            {
-                id: 8,
-                text: "ما هو الموسم الذي تفضل استخدام العطر فيه؟",
-                subtext: "العطور تختلف فعاليتها باختلاف الفصول",
-                choices: [
-                    { text: "الربيع 🌸", value: "spring", points: { floral: 3, fresh: 2 } },
-                    { text: "الصيف ☀️", value: "summer", points: { citrus: 3, fresh: 3, light: 2 } },
-                    { text: "الخريف 🍂", value: "autumn", points: { woody: 3, warm: 2 } },
-                    { text: "الشتاء ❄️", value: "winter", points: { spicy: 3, warm: 3, strong: 2 } }
-                ]
             }
         ];
 
         const perfumes = [
-            // عطور رجالية
             {
-                id: "bleu-de-chanel",
-                name: "بلو دو شانيل",
-                englishName: "Bleu de Chanel",
+                name: "Chanel No. 5",
                 brand: "Chanel",
-                category: "رجالي فاخر",
-                gender: "male",
-                description: "عطر يجمع بين الحداثة والأصالة، يعبر عن الرجل الواثق من نفسه.",
-                notes: ["الجريب فروت", "الفلفل الوردي", "الزنجبيل", "خشب الصندل", "العنبر", "أخشاب الأرز"],
-                occasion: "الاجتماعات الرسمية، العمل، الأمسيات",
-                personality: "واثق، أنيق، عصري",
-                longevity: "8-10 ساعات",
-                sillage: "قوي",
-                year: 2010,
-                points: { masculine: 4, confident: 3, professional: 2, fresh: 2, woody: 3, citrus: 2, strong: 2, modern: 3 },
-                composition: { woody: 40, citrus: 25, spicy: 20, fresh: 10, amber: 5 }
+                category: "كلاسيكي وأنيق",
+                description: "أسطورة عالم العطور، عطر أيقوني يجمع بين الأناقة الكلاسيكية والرقي الفرنسي. إبداع كوكو شانيل الخالد الذي يناسب المرأة الواثقة والمتميزة",
+                notes: ["الألدهيدات", "الياسمين", "الورد", "خشب الصندل", "الفانيليا"],
+                personality: "للمرأة الكلاسيكية الأنيقة والواثقة من نفسها",
+                occasion: "مثالي للمناسبات الخاصة والأوقات المهمة",
+                price: "$$$$",
+                longevity: "ممتاز (8-12 ساعة)",
+                projection: "قوي",
+                points: { feminine: 3, luxury: 3, confident: 2, floral: 3, strong: 2, professional: 2 }
             },
             {
-                id: "aventus",
-                name: "أفينتوس",
-                englishName: "Creed Aventus",
-                brand: "Creed",
-                category: "رجالي فاخر",
-                gender: "male",
-                description: "عطر أسطوري يمثل القوة والنجاح والطموح.",
-                notes: ["الأناناس", "التفاح", "البرغموت", "البتشول", "الفانيليا", "العود"],
-                occasion: "المناسبات المهمة، الأمسيات الرسمية",
-                personality: "طموح، قيادي، ناجح",
-                longevity: "10+ ساعات",
-                sillage: "قوي جداً",
-                year: 2010,
-                points: { masculine: 5, confident: 4, luxury: 3, ambitious: 4, strong: 3, fruity: 3, woody: 2, modern: 3 },
-                composition: { fruity: 35, woody: 30, musky: 15, fresh: 10, spicy: 10 }
-            },
-
-            // عطور نسائية
-            {
-                id: "jadore",
-                name: "جادور",
-                englishName: "J'adore",
+                name: "Dior Sauvage",
                 brand: "Dior",
-                category: "نسائي فاخر",
-                gender: "female",
-                description: "عطر أنثوي ساحر يجسد الجمال والأناقة.",
-                notes: ["اليلانج يلانج", "الورد", "البرقوق", "خشب الأرز", "المسك"],
-                occasion: "المناسبات الخاصة، الحفلات، الأمسيات",
-                personality: "أنيقة، واثقة، متألقة",
-                longevity: "6-8 ساعات",
-                sillage: "متوسط",
-                year: 1999,
-                points: { feminine: 5, elegant: 4, romantic: 3, floral: 4, luxury: 3, warm: 2, confident: 3 },
-                composition: { floral: 50, fruity: 25, woody: 15, musk: 10 }
+                category: "رجولي وجذاب",
+                description: "عطر رجالي عصري يجمع بين القوة والأناقة، مستوحى من المساحات الشاسعة والطبيعة البرية. يناسب الرجل العصري الواثق والجذاب",
+                notes: ["البرغموت", "الفلفل الأسود", "اللافندر", "العنبر الرمادي", "الباتشولي"],
+                personality: "للرجل الواثق والعصري الذي يحب التميز",
+                occasion: "مناسب لجميع الأوقات خاصة النهار والعمل",
+                price: "$$$",
+                longevity: "جيد جداً (6-8 ساعات)",
+                projection: "متوسط إلى قوي",
+                points: { masculine: 3, confident: 3, fresh: 2, professional: 3, moderate: 2, energetic: 1 }
             },
             {
-                id: "coco-mademoiselle",
-                name: "كوكو مادموازيل",
-                englishName: "Coco Mademoiselle",
+                name: "Tom Ford Black Orchid",
+                brand: "Tom Ford",
+                category: "غامض وفاخر",
+                description: "عطر فاخر وغامض يحمل طابع توم فورد المميز، مزيج من الأناقة والإثارة. يناسب الشخصيات الجريئة التي تحب التميز والفخامة",
+                notes: ["الكمأة", "السحلبية السوداء", "الباتشولي", "الفانيليا الداكنة", "خشب الصندل"],
+                personality: "للشخصية الغامضة والفاخرة التي تحب الإثارة",
+                occasion: "مثالي للمساء والمناسبات الخاصة",
+                price: "$$$$",
+                longevity: "ممتاز (10+ ساعات)",
+                projection: "قوي جداً",
+                points: { luxury: 3, evening: 3, bold: 3, warm: 3, strong: 3, confident: 2 }
+            },
+            {
+                name: "Acqua di Giò",
+                brand: "Giorgio Armani",
+                category: "منعش ومائي",
+                description: "عطر منعش مستوحى من البحر الأبيض المتوسط، يجمع بين نقاء المياه وعبق الطبيعة. مثالي للشخصية النشيطة والحيوية",
+                notes: ["النوتات المائية", "الليمون", "الياسمين", "المسك الأبيض", "خشب الأرز"],
+                personality: "للشخصية النشيطة والمحبة للطبيعة والبساطة",
+                occasion: "مثالي للنهار والصيف والأنشطة الخارجية",
+                price: "$$$",
+                longevity: "متوسط (4-6 ساعات)",
+                projection: "متوسط",
+                points: { fresh: 3, energetic: 3, light: 3, citrus: 2, masculine: 2, morning: 2 }
+            },
+            {
+                name: "La Vie Est Belle",
+                brand: "Lancôme",
+                category: "أنثوي وحلو",
+                description: "عطر أنثوي رائع يحتفل بجمال الحياة وسعادتها، مزيج حلو ومنعش يناسب المرأة المتفائلة والمحبة للحياة",
+                notes: ["الكشمش الأسود", "الكمثرى", "الياسمين", "زهر البرتقال", "الفانيليا", "البرالين"],
+                personality: "للمرأة المتفائلة والحيوية والمحبة للحياة",
+                occasion: "مناسب للاستخدام اليومي والمناسبات السعيدة",
+                price: "$$$",
+                longevity: "جيد (6-8 ساعات)",
+                projection: "متوسط",
+                points: { feminine: 3, sweet: 3, romantic: 2, moderate: 2, floral: 2, casual: 2 }
+            },
+            {
+                name: "Oud Wood",
+                brand: "Tom Ford",
+                category: "شرقي وفاخر",
+                description: "عطر شرقي فاخر يجمع بين أصالة العود وفخامة العطور الغربية، إبداع توم فورد في عالم العطور الشرقية",
+                notes: ["العود", "خشب الورد", "خشب الصندل", "الفانيليا", "الجايك الوردي"],
+                personality: "للشخصية المميزة التي تقدر الفخامة والأصالة",
+                occasion: "مثالي للمساء والمناسبات الفاخرة",
+                price: "$$$$",
+                longevity: "ممتاز (12+ ساعة)",
+                projection: "قوي",
+                points: { luxury: 3, warm: 3, strong: 3, evening: 2, confident: 2, bold: 2, neutral: 1 }
+            },
+            {
+                name: "CK One",
+                brand: "Calvin Klein",
+                category: "كاجوال ومنعش",
+                description: "عطر مشترك بسيط ومنعش، كان رائداً في مفهوم العطور المشتركة. يناسب الشخصية البسيطة والعملية",
+                notes: ["الليمون", "البرغموت", "الأناناس", "الياسمين", "البنفسج", "المسك"],
+                personality: "للشخصية البسيطة والعملية والمحبة للانتعاش",
+                occasion: "مثالي للاستخدام اليومي والأنشطة الكاجوال",
+                price: "$$",
+                longevity: "ضعيف إلى متوسط (3-5 ساعات)",
+                projection: "خفيف",
+                points: { neutral: 3, fresh: 3, light: 3, casual: 3, citrus: 2, energetic: 1 }
+            },
+            {
+                name: "Flowerbomb",
+                brand: "Viktor & Rolf",
+                category: "زهري ومتفجر",
+                description: "عطر زهري قوي ومتفجر كما يوحي اسمه، مزيج رائع من الزهور والحلاوة. يناسب المرأة الجريئة والمحبة للإطلالة المميزة",
+                notes: ["الشاي الأخضر", "البرغموت", "الفريزيا", "الياسمين", "الورد", "الباتشولي", "المسك"],
+                personality: "للمرأة الجريئة والمتفائلة والمحبة للتميز",
+                occasion: "مثالي للمناسبات الخاصة والأوقات المميزة",
+                price: "$$$",
+                longevity: "جيد جداً (8-10 ساعات)",
+                projection: "قوي",
+                points: { feminine: 3, bold: 3, floral: 3, strong: 2, sweet: 2, confident: 2 }
+            },
+            {
+                name: "Bleu de Chanel",
                 brand: "Chanel",
-                category: "نسائي فاخر",
-                gender: "female",
-                description: "عطر حر وأنيق يعبر عن المرأة العصرية المستقلة.",
-                notes: ["البرتقال", "الياسمين", "الباتشولي", "الفانيليا", "خشب الأبنوس"],
-                occasion: "العمل، المناسبات الرسمية، الأمسيات",
-                personality: "واثقة، مستقلة، عصرية",
-                longevity: "8+ ساعات",
-                sillage: "قوي",
-                year: 2001,
-                points: { feminine: 4, confident: 3, elegant: 3, modern: 3, sophisticated: 2, professional: 2, citrus: 2 },
-                composition: { floral: 40, citrus: 25, woody: 20, oriental: 10, sweet: 5 }
-            },
-
-            // عطور مشتركة
-            {
-                id: "santal-33",
-                name: "سانتال 33",
-                englishName: "Le Labo Santal 33",
-                brand: "Le Labo",
-                category: "مشترك فاخر",
-                gender: "unisex",
-                description: "عطر أيقوني يجمع بين دفء الخشب والتوابل في تركيبة فريدة.",
-                notes: ["خشب الصندل", "أوراق البرغموت", "الفلفل", "الفيوليت", "الجلد", "العنبر"],
-                occasion: "الاستخدام اليومي، العمل، الأمسيات",
-                personality: "عصري، مستقل، مثقف",
-                longevity: "8-10 ساعات",
-                sillage: "متوسط",
-                year: 2011,
-                points: { unisex: 5, modern: 4, woody: 4, sophisticated: 3, confident: 2, urban: 4, unique: 3 },
-                composition: { woody: 45, spicy: 20, leather: 15, floral: 10, musky: 10 }
+                category: "أنيق وعصري",
+                description: "عطر رجالي أنيق وعصري من شانيل، يجمع بين الانتعاش والأناقة الكلاسيكية. يناسب الرجل الأنيق والمهني",
+                notes: ["الليمون", "النعناع", "الجريب فروت الوردي", "الزنجبيل", "خشب الأرز", "خشب الصندل"],
+                personality: "للرجل الأنيق والمهني الذي يقدر الجودة والكلاسيكية",
+                occasion: "مثالي للعمل والمناسبات المهنية والنهار",
+                price: "$$$$",
+                longevity: "جيد جداً (7-9 ساعات)",
+                projection: "متوسط إلى قوي",
+                points: { masculine: 3, professional: 3, fresh: 2, confident: 2, moderate: 2, luxury: 2 }
             },
             {
-                id: "english-pear",
-                name: "كمثرى إنجليزية",
-                englishName: "Jo Malone English Pear & Freesia",
-                brand: "Jo Malone",
-                category: "مشترك منعش",
-                gender: "unisex",
-                description: "عطر منعش يجمع بين نضارة الكمثرى وروعة الزنابق البرية.",
-                notes: ["الكمثرى", "الزنابق", "المسك", "خشب الأرز", "العنبر"],
-                occasion: "الاستخدام اليومي، الصباح، الربيع والصيف",
-                personality: "طبيعي، هادئ، أنيق",
-                longevity: "4-6 ساعات",
-                sillage: "خفيف",
-                year: 2010,
-                points: { unisex: 4, fresh: 4, elegant: 2, casual: 3, light: 3, fruity: 3, floral: 2, clean: 3 },
-                composition: { fruity: 40, floral: 25, woody: 20, musky: 10, fresh: 5 }
+                name: "Miss Dior",
+                brand: "Dior",
+                category: "رومانسي وكلاسيكي",
+                description: "عطر أنثوي كلاسيكي من ديور، يجمع بين الرومانسية والأناقة الفرنسية. يناسب المرأة الرومانسية والحالمة",
+                notes: ["البرغموت", "الماندرين", "الياسمين الدمشقي", "الورد", "البتيت غرين", "المسك"],
+                personality: "للمرأة الرومانسية والحالمة والأنيقة",
+                occasion: "مثالي للمواعيد الرومانسية والمناسبات الخاصة",
+                price: "$$$",
+                longevity: "جيد (6-8 ساعات)",
+                projection: "متوسط",
+                points: { feminine: 3, romantic: 3, floral: 3, dreamy: 2, soft: 2, luxury: 1 }
             }
         ];
 
         let currentQuestion = 0;
         let userAnswers = {};
         let userPoints = {};
-        let userPreferences = {};
 
         function startQuiz() {
             document.getElementById('welcomeScreen').classList.add('hidden');
@@ -407,17 +514,24 @@
 
             const choicesContainer = document.getElementById('choicesContainer');
             choicesContainer.innerHTML = '';
-            choicesContainer.className = `grid gap-4 ${question.choices.length > 2 ? 'md:grid-cols-2' : ''}`;
 
-            question.choices.forEach((choice, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'choice-btn bg-white dark:bg-gray-800 hover:bg-purple-50 dark:hover:bg-gray-700 text-gray-800 dark:text-white p-6 rounded-2xl text-lg font-medium text-right border-2 border-transparent hover:border-purple-600';
-                btn.innerHTML = choice.text;
-                btn.onclick = () => selectChoice(index, i);
-                choicesContainer.appendChild(btn);
+            // Adjust grid based on number of choices
+            const numChoices = question.choices.length;
+            if (numChoices <= 2) {
+                choicesContainer.className = 'grid gap-4 md:grid-cols-2';
+            } else if (numChoices <= 4) {
+                choicesContainer.className = 'grid gap-4 md:grid-cols-2';
+            } else {
+                choicesContainer.className = 'grid gap-4';
+            }
+
+            question.choices.forEach((choice, choiceIndex) => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn bg-gray-50 dark:bg-gray-700 hover:bg-primary hover:text-white text-gray-800 dark:text-white p-6 rounded-2xl text-lg font-medium transition-all duration-300 text-right border-2 border-transparent hover:border-primary';
+                button.innerHTML = choice.text;
+                button.onclick = () => selectChoice(index, choiceIndex);
+                choicesContainer.appendChild(button);
             });
-
-            updateNavigationButtons();
         }
 
         function selectChoice(questionIndex, choiceIndex) {
@@ -426,16 +540,12 @@
             
             userAnswers[questionIndex] = choice;
             
+            // Add points
             for (const [key, value] of Object.entries(choice.points)) {
                 userPoints[key] = (userPoints[key] || 0) + value;
             }
 
-            if (question.id === 1) userPreferences.gender = choice.value;
-            if (question.id === 2) userPreferences.occasion = choice.value;
-            if (question.id === 5) userPreferences.strength = choice.value;
-            if (question.id === 7) userPreferences.budget = choice.value;
-            if (question.id === 8) userPreferences.season = choice.value;
-
+            // Move to next question or show results
             if (questionIndex < questions.length - 1) {
                 currentQuestion++;
                 setTimeout(() => {
@@ -443,179 +553,140 @@
                     updateProgress();
                 }, 300);
             } else {
-                setTimeout(showResults, 300);
-            }
-        }
-
-        function updateNavigationButtons() {
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            
-            prevBtn.classList.toggle('hidden', currentQuestion === 0);
-            nextBtn.classList.toggle('hidden', currentQuestion === questions.length - 1);
-        }
-
-        function previousQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                showQuestion(currentQuestion);
-                updateProgress();
-            }
-        }
-
-        function nextQuestion() {
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                showQuestion(currentQuestion);
-                updateProgress();
+                setTimeout(() => {
+                    showResults();
+                }, 300);
             }
         }
 
         function updateProgress() {
             const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressBar').style.width = progress + '%';
         }
 
         function showResults() {
             document.getElementById('quizContainer').classList.add('hidden');
             document.getElementById('resultsScreen').classList.remove('hidden');
             
-            const results = calculateBestMatches(userPoints, userPreferences);
-            displayPerfumes(results);
-        }
+            // Find best matching perfume
+            let bestPerfume = null;
+            let bestScore = -1;
 
-        function calculateBestMatches(points, preferences) {
-            let filteredPerfumes = perfumes.filter(p => 
-                (preferences.gender === 'unisex' || p.gender === preferences.gender) &&
-                (preferences.budget === 'high' || !['high'].includes(p.points.luxury) || preferences.budget !== 'low')
-            );
-
-            const scoredPerfumes = filteredPerfumes.map(p => {
+            perfumes.forEach(perfume => {
                 let score = 0;
-                for (const [key, value] of Object.entries(p.points)) {
-                    score += (points[key] || 0) * value;
+                for (const [key, value] of Object.entries(perfume.points)) {
+                    if (userPoints[key]) {
+                        score += Math.min(userPoints[key], value) * 2;
+                        score += userPoints[key] * value;
+                    }
                 }
-
-                if (preferences.occasion && p.points[preferences.occasion]) score += 5;
-                if (preferences.season && p.points[preferences.season]) score += 5;
-                if (preferences.strength && p.points[preferences.strength]) score += 5;
-
-                return { ...p, score };
+                
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestPerfume = perfume;
+                }
             });
 
-            return scoredPerfumes
-                .sort((a, b) => b.score - a.score)
-                .slice(0, 2);
-        }
+            // Display results
+            document.getElementById('resultPerfume').textContent = bestPerfume.name;
+            document.getElementById('resultCategory').textContent = bestPerfume.category;
+            document.getElementById('resultDescription').textContent = bestPerfume.description;
 
-        function displayPerfumes(perfumes) {
-            const container = document.getElementById('perfumesComparison');
-            container.innerHTML = '';
-
-            perfumes.forEach((perfume, index) => {
-                const card = document.createElement('div');
-                card.className = 'perfume-card bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8';
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-6">
-                        <div>
-                            <span class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs px-3 py-1 rounded-full">
-                                ${index === 0 ? 'الخيار الأول' : 'الخيار الثاني'}
-                            </span>
-                            <h3 class="text-2xl font-bold mt-2">${perfume.name}</h3>
-                            <p class="text-gray-600 dark:text-gray-400">${perfume.englishName}</p>
-                        </div>
-                        <div class="bg-gray-100 dark:bg-gray-700 rounded-full w-16 h-16 flex items-center justify-center text-2xl">
-                            ${index + 1}
+            // Display perfume details
+            const detailsContainer = document.getElementById('perfumeDetails');
+            detailsContainer.innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-gold/10 to-primary/10 p-4 rounded-2xl">
+                        <div class="flex items-center mb-3">
+                            <div class="brand-logo">${bestPerfume.brand.charAt(0)}</div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 dark:text-white">🏷️ العلامة التجارية</h4>
+                                <p class="text-gray-600 dark:text-gray-300 font-semibold">${bestPerfume.brand}</p>
+                            </div>
                         </div>
                     </div>
-
-                    <p class="text-lg mb-6 leading-relaxed opacity-90">${perfume.description}</p>
-
-                    <div class="grid grid-cols-2 gap-4 mb-8">
-                        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4">
-                            <h4 class="font-bold">الفئة</h4>
-                            <p class="opacity-80">${perfume.category}</p>
-                        </div>
-                        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-4">
-                            <h4 class="font-bold">المناسبة</h4>
-                            <p class="opacity-80">${perfume.occasion}</p>
-                        </div>
-                        <div class="bg-pink-50 dark:bg-pink-900/20 rounded-lg p-4">
-                            <h4 class="font-bold">الثبات</h4>
-                            <p class="opacity-80">${perfume.longevity}</p>
-                        </div>
-                        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-                            <h4 class="font-bold">الانتشار</h4>
-                            <p class="opacity-80">${perfume.sillage}</p>
-                        </div>
-                    </div>
-
-                    <div class="mb-8">
-                        <h4 class="font-bold text-xl mb-4">تركيبة العطر</h4>
-                        <div class="composition-bar bg-gray-200 dark:bg-gray-700 mb-4">
-                            ${createCompositionHtml(perfume.composition)}
-                        </div>
-                        <div class="text-center">
-                            ${createLegendHtml(perfume.composition)}
-                        </div>
-                    </div>
-
+                    
                     <div>
-                        <h4 class="font-bold text-xl mb-4">المكونات الأساسية</h4>
-                        <div class="flex flex-wrap gap-2">
-                            ${perfume.notes.map(note => `<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full text-sm">${note}</span>`).join('')}
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
+                            <i class="fas fa-leaf ml-2 text-green-500"></i>
+                            المكونات الأساسية
+                        </h4>
+                        <div class="grid grid-cols-1 gap-2">
+                            ${bestPerfume.notes.map(note => `
+                                <div class="bg-white/50 dark:bg-gray-700/50 p-3 rounded-lg border-r-4 border-primary/30">
+                                    <span class="text-gray-700 dark:text-gray-300">• ${note}</span>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function createCompositionHtml(composition) {
-            const total = Object.values(composition).reduce((sum, val) => sum + val, 0);
-            return Object.entries(composition).map(([key, value]) => {
-                const color = getColorForCategory(key);
-                const width = (value / total) * 100;
-                return `<div class="composition-segment" style="width: ${width}%; background-color: ${color}"></div>`;
-            }).join('');
-        }
-
-        function createLegendHtml(composition) {
-            return Object.entries(composition).map(([key, value]) => {
-                if (value === 0) return '';
-                const { name, color, icon } = getCategoryDetails(key);
-                return `
-                    <div class="legend-item">
-                        <span class="legend-color" style="background-color: ${color}"></span>
-                        <span>${icon} ${name} (${value}%)</span>
+                    
+                    <div>
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-2 flex items-center">
+                            <i class="fas fa-user ml-2 text-blue-500"></i>
+                            الشخصية المناسبة
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-300 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">${bestPerfume.personality}</p>
                     </div>
-                `;
-            }).join('');
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-2 flex items-center">
+                            <i class="fas fa-calendar ml-2 text-purple-500"></i>
+                            المناسبة المثلى
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-300 bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">${bestPerfume.occasion}</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-rose/10 to-gold/10 p-4 rounded-2xl">
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-3 flex items-center">
+                            <i class="fas fa-chart-bar ml-2 text-rose"></i>
+                            معلومات تقنية
+                        </h4>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 dark:text-gray-300">الثبات:</span>
+                                <span class="font-semibold text-gray-800 dark:text-white">${bestPerfume.longevity}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 dark:text-gray-300">الإنتشار:</span>
+                                <span class="font-semibold text-gray-800 dark:text-white">${bestPerfume.projection}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 dark:text-gray-300">الفئة السعرية:</span>
+                                <span class="font-semibold text-gray-800 dark:text-white text-gold">${bestPerfume.price}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-primary/10 to-gold/10 p-4 rounded-2xl border border-primary/20">
+                        <h4 class="font-bold text-gray-800 dark:text-white mb-2 flex items-center">
+                            <i class="fas fa-lightbulb ml-2 text-gold"></i>
+                            نصائح الخبراء
+                        </h4>
+                        <ul class="text-gray-600 dark:text-gray-300 text-sm space-y-2">
+                            <li>• رش العطر على نقاط النبض (الرسغين، خلف الأذنين، الرقبة)</li>
+                            <li>• تجنب فرك العطر بعد الرش للحفاظ على تركيبته</li>
+                            <li>• احفظ العطر في مكان بارد بعيداً عن أشعة الشمس المباشرة</li>
+                            <li>• اتركي مساحة بين رش العطر وارتداء الملابس</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+            // Reset progress bar
+            document.getElementById('progressBar').style.width = '100%';
         }
 
-        function getColorForCategory(category) {
-            const colors = {
-                woody: '#84CC16',
-                citrus: '#FBBF24',
-                spicy: '#EF4444',
-                fresh: '#22D3EE',
-                floral: '#F9A8D4',
-                musky: '#A78BFA',
-                amber: '#F59E0B',
-                leather: '#D97706',
-                sweet: '#F97316',
-                fruity: '#A855F7'
-            };
-            return colors[category] || '#CBD5E0';
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = {};
+            userPoints = {};
+            
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+            document.getElementById('progressBar').style.width = '0%';
         }
-
-        function getCategoryDetails(category) {
-            const categories = {
-                woody: { name: 'خشبي', color: '#84CC16', icon: '🌳' },
-                citrus: { name: 'حمضي', color: '#FBBF24', icon: '🍋' },
-                spicy: { name: 'توابل', color: '#EF4444', icon: '🌶️' },
-                fresh: { name: 'منعش', color: '#22D3EE', icon: '💧' },
-                floral: { name: 'زهري', color: '#F9A8D4', icon: '🌸' },
-                musky: { name: 'مسكي', color: '#A78BFA', icon: '🦣' },
-                amber: { name: 'عنبري', color: '#F59E0B', icon: '
-\<Streaming stoppped because the conversation grew too long for this model\>
+    </script>
+</body>
+</html>
