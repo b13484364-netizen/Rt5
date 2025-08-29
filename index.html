@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد اختيار العطر المثالي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #faf5f0;
+        }
+        
+        .perfume-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f4f0 100%);
+        }
+        
+        .perfume-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #d4a373 0%, #a98467 100%);
+            transition: width 0.5s ease;
+        }
+        
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .option-btn:hover {
+            transform: scale(1.03);
+        }
+        
+        .option-btn.selected {
+            border-color: #a98467;
+            background-color: #f8f4f0;
+            box-shadow: 0 0 0 2px #d4a373;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-amber-900 mb-3">مساعد اختيار العطر المثالي</h1>
+            <p class="text-gray-600">أجيب عن الأسئلة التالية وسنساعدك في العثور على العطر الذي يناسبك تماماً</p>
+        </header>
+        
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex justify-between mb-2">
+                <span class="text-sm font-medium text-amber-900">تقدم الاستبيان</span>
+                <span class="text-sm font-medium text-gray-600"><span id="current-step">1</span>/8</span>
+            </div>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill" style="width: 12.5%"></div>
+            </div>
+        </div>
+        
+        <!-- Questionnaire Container -->
+        <div id="questionnaire" class="bg-white rounded-xl shadow-md p-6 mb-8 animate-fade-in">
+            <!-- Questions will be dynamically inserted here -->
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between">
+            <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hidden">
+                <i class="fas fa-arrow-right ml-2"></i> السابق
+            </button>
+            <button id="next-btn" class="px-6 py-2 bg-amber-800 text-white rounded-lg font-medium">
+                التالي <i class="fas fa-arrow-left mr-2"></i>
+            </button>
+        </div>
+        
+        <!-- Results Container (Hidden Initially) -->
+        <div id="results-container" class="hidden mt-12">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl md:text-3xl font-bold text-amber-900 mb-3">نتائج التوصية</h2>
+                <p class="text-gray-600">بناءً على إجاباتك، نوصي بالعطور التالية:</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-10">
+                <!-- Recommended perfumes will be inserted here -->
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <h3 class="text-xl font-bold text-amber-900 mb-4">مزيج عطر خاص مقترح لك</h3>
+                <div id="custom-blend" class="space-y-4">
+                    <!-- Custom blend will be inserted here -->
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <button id="restart-btn" class="px-6 py-2 bg-amber-800 text-white rounded-lg font-medium">
+                    <i class="fas fa-redo mr-2"></i> إعادة الاختبار
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Questions data
+        const questions = [
+            {
+                question: "ما هو جنسك؟",
+                options: [
+                    { text: "ذكر", value: "male" },
+                    { text: "أنثى", value: "female" },
+                    { text: "أفضل عدم التحديد", value: "other" }
+                ],
+                key: "gender"
+            },
+            {
+                question: "ما هو عمرك؟",
+                options: [
+                    { text: "أقل من 18 سنة", value: "under18" },
+                    { text: "18 - 25 سنة", value: "18-25" },
+                    { text: "26 - 35 سنة", value: "26-35" },
+                    { text: "36 - 45 سنة", value: "36-45" },
+                    { text: "أكثر من 45 سنة", value: "over45" }
+                ],
+                key: "age"
+            },
+            {
+                question: "ما نوع المناسبة التي تريد العطر لها؟",
+                options: [
+                    { text: "يومي / عمل", value: "daily" },
+                    { text: "مناسبة رسمية", value: "formal" },
+                    { text: "موعد رومانسي", value: "romantic" },
+                    { text: "مناسبة خاصة", value: "special" },
+                    { text: "ليلية", value: "night" }
+                ],
+                key: "occasion"
+            },
+            {
+                question: "ما الوقت الذي تفضل استخدام العطر فيه؟",
+                options: [
+                    { text: "الصباح", value: "morning" },
+                    { text: "بعد الظهر", value: "afternoon" },
+                    { text: "المساء", value: "evening" },
+                    { text: "الليل", value: "night" },
+                    { text: "طوال اليوم", value: "all-day" }
+                ],
+                key: "time"
+            },
+            {
+                question: "ما هي حالتك المزاجية المفضلة عند استخدام العطر؟",
+                options: [
+                    { text: "نشيط/متفائل", value: "energetic" },
+                    { text: "هادئ/مرتاح", value: "calm" },
+                    { text: "واثق/قوي", value: "confident" },
+                    { text: "رومانسي/عاطفي", value: "romantic" },
+                    { text: "غامض/جذاب", value: "mysterious" }
+                ],
+                key: "mood"
+            },
+            {
+                question: "ما نوع العطر الذي تفضله؟",
+                options: [
+                    { text: "شرقي", value: "oriental" },
+                    { text: "غربي", value: "western" },
+                    { text: "عصري", value: "modern" },
+                    { text: "كلاسيكي", value: "classic" },
+                    { text: "لا يوجد تفضيل", value: "no-preference" }
+                ],
+                key: "type"
+            },
+            {
+                question: "هل تفضل العطور الحارة أم الباردة؟",
+                options: [
+                    { text: "حارة", value: "warm" },
+                    { text: "باردة", value: "cool" },
+                    { text: "متوسطة", value: "balanced" },
+                    { text: "حارة في الشتاء وباردة في الصيف", value: "seasonal" }
+                ],
+                key: "temperature"
+            },
+            {
+                question: "ما هي مدة الثبات التي تفضلها للعطر؟",
+                options: [
+                    { text: "قصيرة (3-4 ساعات)", value: "short" },
+                    { text: "متوسطة (5-6 ساعات)", value: "medium" },
+                    { text: "طويلة (7-8 ساعات)", value: "long" },
+                    { text: "طويلة جداً (أكثر من 8 ساعات)", value: "very-long" }
+                ],
+                key: "longevity"
+            }
+        ];
+
+        // Perfume database
+        const perfumes = [
+            {
+                name: "شانيل No. 5",
+                brand: "شانيل",
+                description: "عطر كلاسيكي أنثوي يجمع بين الفخامة والأناقة، برائحة الأزهار والمسك.",
+                type: ["female", "26-35", "formal", "evening", "confident", "classic", "balanced", "long"],
+                image: "https://via.placeholder.com/300x300?text=Chanel+No.5"
+            },
+            {
+                name: "سوفاج",
+                brand: "ديور",
+                description: "عطر ذكوري قوي وجذاب، برائحة الحمضيات والتوابل والخشب.",
+                type: ["male", "18-25", "night", "evening", "confident", "modern", "warm", "long"],
+                image: "https://via.placeholder.com/300x300?text=Dior+Sauvage"
+            },
+            {
+                name: "بلاك أفيشانو",
+                brand: "توم فورد",
+                description: "عطر شرقي غامض ورومانسي، برائحة الفانيليا والتونكا والفلفل الوردي.",
+                type: ["other", "26-35", "romantic", "night", "romantic", "oriental", "warm", "very-long"],
+                image: "https://via.placeholder.com/300x300?text=Tom+Ford+Black+Orchid"
+            },
+            {
+                name: "لا في إست بيت",
+                brand: "مارك جاكوبس",
+                description: "عطر نسائي منعش وحيوي، برائحة الكمثرى والعنب والمسك.",
+                type: ["female", "18-25", "daily", "all-day", "energetic", "modern", "cool", "medium"],
+                image: "https://via.placeholder.com/300x300?text=Marc+Jacobs+Daisy"
+            },
+            {
+                name: "أكوا دي جيو",
+                brand: "أرماني",
+                description: "عطر صيفي منعش، برائحة الحمضيات والنباتات المائية والمسك.",
+                type: ["male", "18-25", "daily", "morning", "energetic", "modern", "cool", "medium"],
+                image: "https://via.placeholder.com/300x300?text=Armani+Acqua+di+Gio"
+            },
+            {
+                name: "شاليمار",
+                brand: "جيرلان",
+                description: "عطر شرقي كلاسيكي، برائحة الحمضيات والفانيليا والمسك.",
+                type: ["female", "over45", "special", "evening", "romantic", "oriental", "warm", "very-long"],
+                image: "https://via.placeholder.com/300x300?text=Guerlain+Shalimar"
+            },
+            {
+                name: "وان ميليون",
+                brand: "باكارابان",
+                description: "عطر ذكوري حار وجذاب، برائحة الجريب فروت والنعناع والتوابل.",
+                type: ["male", "26-35", "night", "evening", "confident", "modern", "warm", "long"],
+                image: "https://via.placeholder.com/300x300?text=Paco+Rabanne+1+Million"
+            },
+            {
+                name: "لا في بيل",
+                brand: "جان بول غوتييه",
+                description: "عطر نسائي جريء، برائحة الزنجبيل والياسمين والفانيليا.",
+                type: ["female", "26-35", "special", "night", "confident", "modern", "warm", "long"],
+                image: "https://via.placeholder.com/300x300?text=Jean+Paul+Gaultier+La+Vie+Est+Belle"
+            }
+        ];
+
+        // User answers
+        const userAnswers = {};
+        let currentQuestionIndex = 0;
+
+        // DOM elements
+        const questionnaireEl = document.getElementById('questionnaire');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const currentStepEl = document.getElementById('current-step');
+        const progressFillEl = document.getElementById('progress-fill');
+        const resultsContainerEl = document.getElementById('results-container');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Initialize the app
+        function init() {
+            showQuestion(currentQuestionIndex);
+            updateProgressBar();
+            
+            // Event listeners
+            nextBtn.addEventListener('click', goToNextQuestion);
+            prevBtn.addEventListener('click', goToPrevQuestion);
+            restartBtn.addEventListener('click', restartQuestionnaire);
+        }
+
+        // Show current question
+        function showQuestion(index) {
+            const question = questions[index];
+            
+            let optionsHtml = '';
+            question.options.forEach((option, i) => {
+                optionsHtml += `
+                    <button class="option-btn w-full p-4 mb-3 border-2 border-gray-200 rounded-lg text-left transition-all ${userAnswers[question.key] === option.value ? 'selected' : ''}" 
+                            data-value="${option.value}" data-key="${question.key}">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 rounded-full border-2 border-gray-300 mr-3 flex items-center justify-center">
+                                ${userAnswers[question.key] === option.value ? '<div class="w-3 h-3 rounded-full bg-amber-700"></div>' : ''}
+                            </div>
+                            <span>${option.text}</span>
+                        </div>
+                    </button>
+                `;
+            });
+            
+            questionnaireEl.innerHTML = `
+                <h2 class="text-xl md:text-2xl font-bold text-amber-900 mb-6">${question.question}</h2>
+                <div class="space-y-3">${optionsHtml}</div>
+            `;
+            
+            // Add event listeners to option buttons
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const key = this.getAttribute('data-key');
+                    const value = this.getAttribute('data-value');
+                    
+                    // Remove selected class from all options
+                    document.querySelectorAll(`.option-btn[data-key="${key}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                        opt.querySelector('div div').innerHTML = '';
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    this.querySelector('div div').innerHTML = '<div class="w-3 h-3 rounded-full bg-amber-700"></div>';
+                    
+                    // Store answer
+                    userAnswers[key] = value;
+                });
+            });
+            
+            // Update navigation buttons
+            if (index === 0) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+            
+            if (index === questions.length - 1) {
+                nextBtn.innerHTML = 'عرض النتائج <i class="fas fa-check mr-2"></i>';
+            } else {
+                nextBtn.innerHTML = 'التالي <i class="fas fa-arrow-left mr-2"></i>';
+            }
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressFillEl.style.width = `${progress}%`;
+            currentStepEl.textContent = currentQuestionIndex + 1;
+        }
+
+        // Go to next question
+        function goToNextQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            
+            // Validate that an option is selected
+            if (!userAnswers[currentQuestion.key]) {
+                alert("الرجاء اختيار إجابة للمتابعة");
+                return;
+            }
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+                updateProgressBar();
+            } else {
+                showResults();
+            }
+        }
+
+        // Go to previous question
+        function goToPrevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+                updateProgressBar();
+            }
+        }
+
+        // Show results
+        function showResults() {
+            // Hide questionnaire
+            questionnaireEl.classList.add('hidden');
+            prevBtn.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            // Show results container
+            resultsContainerEl.classList.remove('hidden');
+            
+            // Find matching perfumes
+            const userPreferences = Object.values(userAnswers);
+            const matchedPerfumes = perfumes.map(perfume => {
+                const matchScore = perfume.type.filter(type => userPreferences.includes(type)).length;
+                return { ...perfume, score: matchScore };
+            }).sort((a, b) => b.score - a.score);
+            
+            // Display top 2 perfumes
+            const topPerfumes = matchedPerfumes.slice(0, 2);
+            const perfumesContainer = resultsContainerEl.querySelector('.grid');
+            
+            topPerfumes.forEach(perfume => {
+                perfumesContainer.innerHTML += `
+                    <div class="perfume-card rounded-xl overflow-hidden shadow-md bg-white">
+                        <div class="h-48 bg-gray-100 flex items-center justify-center">
+                            <img src="${perfume.image}" alt="${perfume.name}" class="h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-amber-900 mb-1">${perfume.name}</h3>
+                            <p class="text-gray-500 mb-3">${perfume.brand}</p>
+                            <p class="text-gray-700">${perfume.description}</p>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex justify-between text-sm text-gray-500">
+                                    <span>مطابقة التفضيلات:</span>
+                                    <span>${Math.round((perfume.score / questions.length) * 100)}%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                    <div class="bg-amber-700 h-2 rounded-full" style="width: ${Math.round((perfume.score / questions.length) * 100)}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Generate custom blend suggestion
+            const customBlendEl = document.getElementById('custom-blend');
+            const blendNotes = generateCustomBlend(userAnswers);
+            
+            blendNotes.forEach(note => {
+                customBlendEl.innerHTML += `
+                    <div class="flex items-start">
+                        <div class="bg-amber-100 text-amber-800 rounded-full w-8 h-8 flex items-center justify-center mr-3 mt-1">
+                            <i class="fas fa-${note.icon}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">${note.title}</h4>
+                            <p class="text-gray-600">${note.description}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Generate custom blend based on user answers
+        function generateCustomBlend(answers) {
+            const blendNotes = [];
+            
+            // Base note based on gender and age
+            if (answers.gender === 'male') {
+                blendNotes.push({
+                    title: "النوتة الأساسية",
+                    description: "خشب الصندل أو المسك لتعطي العطر عمقاً وثباتاً",
+                    icon: "tree"
+                });
+            } else if (answers.gender === 'female') {
+                blendNotes.push({
+                    title: "النوتة الأساسية",
+                    description: "الفانيليا أو العنبر لتعطي العطر دفئاً وأنوثة",
+                    icon: "seedling"
+                });
+            } else {
+                blendNotes.push({
+                    title: "النوتة الأساسية",
+                    description: "التونكا أو الباتشولي لتعطي العطر غموضاً وجاذبية",
+                    icon: "leaf"
+                });
+            }
+            
+            // Heart note based on occasion and mood
+            if (answers.occasion === 'romantic' || answers.mood === 'romantic') {
+                blendNotes.push({
+                    title: "نوتة القلب",
+                    description: "الياسمين أو الورد لتعطي العطر رومانسية وعاطفة",
+                    icon: "heart"
+                });
+            } else if (answers.occasion === 'formal' || answers.mood === 'confident') {
+                blendNotes.push({
+                    title: "نوتة القلب",
+                    description: "الخزامى أو الإيلنغ إيلنغ لتعطي العطر أناقة وثقة",
+                    icon: "star"
+                });
+            } else if (answers.mood === 'energetic') {
+                blendNotes.push({
+                    title: "نوتة القلب",
+                    description: "الفلفل الوردي أو الزنجبيل لتعطي العطر حيوية ونشاط",
+                    icon: "bolt"
+                });
+            } else {
+                blendNotes.push({
+                    title: "نوتة القلب",
+                    description: "البرغموت أو الكمثرى لتعطي العطر توازناً وانتعاشاً",
+                    icon: "apple-alt"
+                });
+            }
+            
+            // Top note based on temperature and time
+            if (answers.temperature === 'warm') {
+                blendNotes.push({
+                    title: "النوتة العلوية",
+                    description: "القرنفل أو القرفة لتعطي العطر دفئاً وتوابل",
+                    icon: "fire"
+                });
+            } else if (answers.temperature === 'cool') {
+                blendNotes.push({
+                    title: "النوتة العلوية",
+                    description: "النعناع أو الحمضيات لتعطي العطر انتعاشاً وبرودة",
+                    icon: "snowflake"
+                });
+            } else {
+                blendNotes.push({
+                    title: "النوتة العلوية",
+                    description: "التفاح الأخضر أو الأناناس لتعطي العطر توازناً",
+                    icon: "cloud-sun"
+                });
+            }
+            
+            // Special addition based on type
+            if (answers.type === 'oriental') {
+                blendNotes.push({
+                    title: "إضافة خاصة",
+                    description: "قطرة من العنبر أو البخور لتعطي العطر طابعاً شرقياً",
+                    icon: "gem"
+                });
+            } else if (answers.type === 'western') {
+                blendNotes.push({
+                    title: "إضافة خاصة",
+                    description: "لمسة من الفلفل الأسود أو الجلد لتعطي العطر طابعاً غربياً",
+                    icon: "hat-cowboy"
+                });
+            }
+            
+            return blendNotes;
+        }
+
+        // Restart questionnaire
+        function restartQuestionnaire() {
+            // Reset answers and question index
+            for (const key in userAnswers) {
+                delete userAnswers[key];
+            }
+            currentQuestionIndex = 0;
+            
+            // Hide results and show questionnaire
+            resultsContainerEl.classList.add('hidden');
+            questionnaireEl.classList.remove('hidden');
+            prevBtn.classList.add('hidden');
+            nextBtn.classList.remove('hidden');
+            
+            // Clear results containers
+            resultsContainerEl.querySelector('.grid').innerHTML = '';
+            document.getElementById('custom-blend').innerHTML = '';
+            
+            // Show first question
+            showQuestion(currentQuestionIndex);
+            updateProgressBar();
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
